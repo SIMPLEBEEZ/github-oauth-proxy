@@ -1,6 +1,5 @@
-// /api/github-device/index.js
-module.exports = async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGIN || "*");
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -13,8 +12,8 @@ module.exports = async (req, res) => {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         client_id: process.env.GITHUB_CLIENT_ID,
-        scope: "repo user",
-      }),
+        scope: "repo user"
+      })
     });
 
     const data = await response.json();
@@ -22,4 +21,4 @@ module.exports = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-};
+}
