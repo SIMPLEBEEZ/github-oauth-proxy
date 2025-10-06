@@ -1,5 +1,5 @@
-/** Serverless proxy for GitHub Device Flow: step 2 (exchange device_code -> access_token) */
-module.exports = async function handler(req, res) {
+// /api/github-token.js
+module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGIN || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
 
   let body = {};
   try {
-    body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
+    body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
   } catch (_) {}
 
   const { device_code } = body;
@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
   try {
     const response = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         client_id: process.env.GITHUB_CLIENT_ID,   // DON'T use secret (frontend-only flow)
         device_code,

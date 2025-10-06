@@ -1,18 +1,24 @@
-/** Serverless proxy for GitHub Device Flow: step 1 (device & user codes) */
-module.exports = async function handler(req, res) {
+// /api/github-device.js
+module.exports = async (req, res) => {
+  // Always set CORS headers
   res.setHeader("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGIN || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") return res.status(200).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed" });
+  }
 
   try {
     const response = await fetch("https://github.com/login/device/code", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
-        client_id: process.env.GITHUB_CLIENT_ID,   // save at Vercelu as env var
+        client_id: process.env.GITHUB_CLIENT_ID,
         scope: "repo user"
       })
     });
