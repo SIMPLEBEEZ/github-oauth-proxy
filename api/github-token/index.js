@@ -1,4 +1,4 @@
-// /api/github-token.js
+// /api/github-token/index.js
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGIN || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -8,9 +8,7 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
 
   let body = {};
-  try {
-    body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-  } catch (_) {}
+  try { body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {}); } catch (_) {}
 
   const { device_code } = body;
   if (!device_code) return res.status(400).json({ error: "device_code is required" });
@@ -20,10 +18,10 @@ module.exports = async (req, res) => {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
-        client_id: process.env.GITHUB_CLIENT_ID,   // DON'T use secret (frontend-only flow)
+        client_id: process.env.GITHUB_CLIENT_ID,
         device_code,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code"
-      })
+        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+      }),
     });
 
     const data = await response.json();

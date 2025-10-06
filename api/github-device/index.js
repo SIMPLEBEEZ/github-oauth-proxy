@@ -1,17 +1,11 @@
-// /api/github-device.js
+// /api/github-device/index.js
 module.exports = async (req, res) => {
-  // Always set CORS headers
   res.setHeader("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGIN || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
 
   try {
     const response = await fetch("https://github.com/login/device/code", {
@@ -19,8 +13,8 @@ module.exports = async (req, res) => {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         client_id: process.env.GITHUB_CLIENT_ID,
-        scope: "repo user"
-      })
+        scope: "repo user",
+      }),
     });
 
     const data = await response.json();
