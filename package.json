@@ -1,5 +1,7 @@
 {
   "name": "github-oauth-proxy",
   "version": "1.0.0",
-  "private": true
+  "main": "api/github-device.js",
+  "private": true,
+  "dependencies": {}
 }
