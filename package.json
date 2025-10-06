@@ -1,7 +1,8 @@
 {
+  "type": "module",
   "name": "github-oauth-proxy",
   "version": "1.0.0",
-  "main": "api/github-device.js",
-  "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }
